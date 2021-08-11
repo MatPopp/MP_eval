@@ -102,6 +102,7 @@ def data_from_directory(path,read_regex='', read_function=spectrum_to_pd,var_str
     data_dict={'filepath':path_list,'modify_time':modify_time_list,'data':df_list}
     data_dict={**data_dict,**var_dict}
     data=pd.DataFrame.from_dict(data_dict)
+    data.sort_values('modify_time')
     return data
 
 if __name__ == "__main__":
