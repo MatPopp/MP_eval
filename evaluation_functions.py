@@ -9,9 +9,22 @@ import copy
 
 
     
+def remove_cosmics(intensity,factor=1.2):
+    intensity=np.array(intensity)
+    intensityx = np.append(intensity,[intensity[-1],intensity[-1]])
+    intensity1 = np.append(intensity[0],intensityx)
+    fraction=intensity[1::]/intensity[0:-1]
+    test = np.where(fraction<factor,intensity[1::],(intensity1[0:-4]+intensity1[4::])/2)
+    temp=np.insert(test,0,intensity[0],axis=0)
+    intensityx = np.append(intensity[0],intensity)
+    intensityy = np.append(intensityx,intensity[-1])
+    intensity1 = np.append(intensity[0],intensityy)
+    fraction2=intensity[0:-1]/intensity[1::]
+    return np.insert(np.where(fraction2<factor,temp[0:-1],(intensity1[0:-4]+intensity1[4::])/2),-1,intensity[-1],axis=0)
 
 
-def plot_results(result, best_vals=True, varlabels=None,
+
+def plot_brute_leastsquares_results(result, best_vals=True, varlabels=None,
                        output=None, leastsq_fit_result=None):
     """Visualize the result of the brute force grid search.
 
@@ -105,10 +118,9 @@ def plot_results(result, best_vals=True, varlabels=None,
                                     np.median(result.brute_Jout)/2.0, 20, dtype='int')
                 lvls2 = np.linspace(np.median(result.brute_Jout)/2.0,
                                     np.median(result.brute_Jout), 20, dtype='int')
-                print(lvls1)
-                print(lvls2)
+                
                 lvls = np.unique(np.concatenate((lvls1, lvls2)))
-                print(lvls)
+                
                 ax.contourf(X.T, Y.T, np.minimum.reduce(result.brute_Jout, axis=red_axis),
                             lvls, norm=LogNorm(),
                             cmap=cm.nipy_spectral)
@@ -137,9 +149,9 @@ def plot_results(result, best_vals=True, varlabels=None,
 
 
 def brute_leastsquare_fit(fun, x_data, y_data,p_names=None,p_min_max_steps_dict=None,
-                          visualize=False):
+                          const_params=[], visualize=False):
     
-    """A very robust fit routine taken from 
+    """A very robust fit routine inspired from 
     https://lmfit.github.io/lmfit-py/examples/example_brute.html
     that first performs a brute force fit with subsequent least squares fit of 
     best results"""
@@ -147,7 +159,7 @@ def brute_leastsquare_fit(fun, x_data, y_data,p_names=None,p_min_max_steps_dict=
     if p_names == None or p_min_max_steps_dict==None:
         raise Exception ('p_names and p_min_max_steps must be given!'+ 
                          'structure of p_min_max_steps_dict: {"pname0":[min0,max0,brute_steps0]}')
-        
+   
     params = Parameters() ### initialize LMfit parameters
     for p_name in p_names:
         min_val=p_min_max_steps_dict[p_name][0]
@@ -167,6 +179,10 @@ def brute_leastsquare_fit(fun, x_data, y_data,p_names=None,p_min_max_steps_dict=
                 arglist=[]
                 for p_name in p_names:
                     arglist.append(v[p_name])
+                
+                for const_param in const_params:
+                    arglist.append(const_param)
+                
                 ret=np.array((fun(x_data,*arglist)-y_data),dtype=float)
                 return(ret)
             brute_result=lmfit.minimize(minimize_fun,params,method='brute',nan_policy='omit')
@@ -179,12 +195,20 @@ def brute_leastsquare_fit(fun, x_data, y_data,p_names=None,p_min_max_steps_dict=
             return((best_result,brute_result))
             
     best_result,brute_result = cost_function_fit()
-    if visualize == True:
-        plot_results(brute_result,leastsq_fit_result=best_result)
     arg_list=[]
     for p_name in p_names:
         arg_list.append(best_result.params.valuesdict()[p_name])
-    return (arg_list)
+    for const_param in const_params:
+        arg_list.append(const_param)
+    
+        
+    if visualize == True:
+        plot_brute_leastsquares_results(brute_result,leastsq_fit_result=best_result)
+        plt.figure()
+        plt.plot(x_data,y_data,label='data',color='blue')
+        plt.plot(x_data,fun(x_data,*arg_list),label='Fit',color='red')
+        plt.show()
+    return (arg_list[0:len(p_names)])
      
 
 

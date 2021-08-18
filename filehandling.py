@@ -21,6 +21,19 @@ def spectrum_to_pd(filepath):
     spec_df=pd.read_csv(filepath,names=['wavelength','counts'],skiprows=4,delimiter='\t')
     spec_df['wavelength']=spec_df['wavelength']*1e-9
     return(spec_df)
+    
+def get_calibration_function(path,regex):
+    
+    """gets a calibration cal_func(wavelength) by which counts should be
+    multiplied for calibration using the scipy interp1d method"""
+    
+    from scipy.interpolate import interp1d
+    regex_condition = re.compile(regex)
+    for item in os.listdir(path):
+        if regex_condition.match(item):
+            lamb, cal_factor, sensitivity = np.loadtxt(path+'/'+item,skiprows=1).T
+            cal_func = interp1d(lamb,cal_factor)
+    return cal_func
         
 class dat_to_object():
     """old, use dat_to_pd instead"""  
@@ -102,7 +115,7 @@ def data_from_directory(path,read_regex='', read_function=spectrum_to_pd,var_str
     data_dict={'filepath':path_list,'modify_time':modify_time_list,'data':df_list}
     data_dict={**data_dict,**var_dict}
     data=pd.DataFrame.from_dict(data_dict)
-    data.sort_values('modify_time')
+    data=data.sort_values('modify_time').reset_index(drop=True)
     return data
 
 if __name__ == "__main__":
