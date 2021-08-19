@@ -2,6 +2,7 @@ import numpy as np
 import filehandling as fh
 import evaluation_functions as eval_func
 import physical_functions as phys_func
+import plot_functions as plot_func
 import keyboard 
 import time
 import pandas as pd
@@ -132,4 +133,19 @@ if __name__=='__main__':
     
     fig_ddep.savefig('d_dep_spectra.png')
         
+    ## plot calibrated intensity vs d 
+    fig_intensity,ax_intensity=plt.subplots()
+     
+    V_SMU_plot=24
+    intensity_plot=plot_func.colorplot(df.wavelength[:,V_SMU_plot]*1e9,
+                        0*df.wavelength[:,V_SMU_plot]+df.d_fit[:,V_SMU_plot]*1e6,
+                        df.corrected_counts[:,V_SMU_plot],
+                        xlabel=r'$\lambda$ in nm',
+                        ylabel=r'$d$ in nm')
+    intensity_plot.fig.savefig('intensity.png')
+    
+         
+         
+     
+     
     
