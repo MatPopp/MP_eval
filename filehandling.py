@@ -83,7 +83,7 @@ def float_from_string(string,start='',end=''):
     return(float(extracted[0]))
     
                 
-def data_from_directory(path,read_regex='', read_function=spectrum_to_pd,var_strings=[]):
+def data_from_directory(path,read_regex='', read_function=spectrum_to_pd, var_strings=[], var_regex_dict={}):
     """loads all files in path resulting in a pd dataframe of descriptions and dataframes. 
     only files with 'read_regex' in filename are included.
     'read_function' shall return a pandas dataframe with filepath as argument. 
@@ -97,6 +97,8 @@ def data_from_directory(path,read_regex='', read_function=spectrum_to_pd,var_str
     var_dict={}
     for var_string in var_strings:
         var_dict[var_string]=[]
+    for key in var_regex_dict.keys():
+        var_dict[key]=[]
     
     for filename in os.listdir(path):
         if len(re.findall(read_regex,filename))>0:
@@ -112,6 +114,13 @@ def data_from_directory(path,read_regex='', read_function=spectrum_to_pd,var_str
                 else:
                     var_val=float(var_val[0])
                 var_dict[var_string].append(var_val)
+            for key,var_regex in var_regex_dict.items():
+                var_val=re.findall(var_regex,filename)
+                if len(var_val)==0:
+                    raise Exception('var_regex "'+var_regex+'" could not be found with value in "'+filename+'"')
+                else:
+                    var_val=float(var_val[0])
+                var_dict[key].append(var_val)
     data_dict={'filepath':path_list,'modify_time':modify_time_list,'data':df_list}
     data_dict={**data_dict,**var_dict}
     data=pd.DataFrame.from_dict(data_dict)

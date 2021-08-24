@@ -13,7 +13,7 @@ import refractive_index as ri
 def read_data(datapath='data'):
     """this function shall contaion all the data reading and put all data into 
     a pandas DataFrame"""
-    df=fh.data_from_directory('data', read_regex='_30s' ,var_strings=['V_Piezo','V_SMU'],
+    df=fh.data_from_directory(datapath, read_regex='_30s' ,var_strings=['V_Piezo','V_SMU'],
                               read_function=fh.spectrum_to_pd)  
     return(df)
     
@@ -138,7 +138,7 @@ if __name__=='__main__':
      
     V_SMU_plot=24
     intensity_plot=plot_func.colorplot(df.wavelength[:,V_SMU_plot]*1e9,
-                        0*df.wavelength[:,V_SMU_plot]+df.d_fit[:,V_SMU_plot]*1e6,
+                        0*df.wavelength[:,V_SMU_plot]+df.d_fit[:,V_SMU_plot]*1e9,
                         df.corrected_counts[:,V_SMU_plot],
                         xlabel=r'$\lambda$ in nm',
                         ylabel=r'$d$ in nm')

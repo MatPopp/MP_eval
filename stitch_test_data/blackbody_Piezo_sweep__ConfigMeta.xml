@@ -1,0 +1,152 @@
+<Cmd_Flip_Lamp>
+  <AddOn__Device_Type>Cmd Device</AddOn__Device_Type>
+  <Channel:_Arg1>TRUE</Channel:_Arg1>
+  <Channel:_Arg2>FALSE</Channel:_Arg2>
+  <Channel:_Arg3>FALSE</Channel:_Arg3>
+  <Channel:Ret1>TRUE</Channel:Ret1>
+  <Channel:Ret2>FALSE</Channel:Ret2>
+  <Channel:Ret3>FALSE</Channel:Ret3>
+  <Input_String>cmd /k cd C:\LAP Measurements 2.2\Devices\Cmd Device\python console programs\set_flip_mount &#38; set_flip_mount.bat 37002183</Input_String>
+</Cmd_Flip_Lamp>
+<Cmd_Flip_Pinhole>
+  <AddOn__Device_Type>Cmd Device</AddOn__Device_Type>
+  <Channel:_Arg1>TRUE</Channel:_Arg1>
+  <Channel:_Arg2>FALSE</Channel:_Arg2>
+  <Channel:_Arg3>FALSE</Channel:_Arg3>
+  <Channel:Ret1>FALSE</Channel:Ret1>
+  <Channel:Ret2>FALSE</Channel:Ret2>
+  <Channel:Ret3>FALSE</Channel:Ret3>
+  <Input_String>cmd /k cd C:\LAP Measurements 2.2\Devices\Cmd Device\python console programs\set_flip_mount &#38; set_flip_mount.bat 37002174</Input_String>
+</Cmd_Flip_Pinhole>
+<Cmd_Flip_Spectrometer>
+  <AddOn__Device_Type>Cmd Device</AddOn__Device_Type>
+  <Channel:_Arg1>TRUE</Channel:_Arg1>
+  <Channel:_Arg2>FALSE</Channel:_Arg2>
+  <Channel:_Arg3>FALSE</Channel:_Arg3>
+  <Channel:Ret1>FALSE</Channel:Ret1>
+  <Channel:Ret2>FALSE</Channel:Ret2>
+  <Channel:Ret3>FALSE</Channel:Ret3>
+  <Input_String>cmd /k cd C:\LAP Measurements 2.2\Devices\Cmd Device\python console programs\set_flip_mount &#38; set_flip_mount.bat 37002154</Input_String>
+</Cmd_Flip_Spectrometer>
+<Cmd_Flip_Widefield>
+  <AddOn__Device_Type>Cmd Device</AddOn__Device_Type>
+  <Channel:_Arg1>TRUE</Channel:_Arg1>
+  <Channel:_Arg2>FALSE</Channel:_Arg2>
+  <Channel:_Arg3>FALSE</Channel:_Arg3>
+  <Channel:Ret1>FALSE</Channel:Ret1>
+  <Channel:Ret2>FALSE</Channel:Ret2>
+  <Channel:Ret3>FALSE</Channel:Ret3>
+  <Input_String>cmd /k cd C:\LAP Measurements 2.2\Devices\Cmd Device\python console programs\set_flip_mount &#38; set_flip_mount.bat 37003163</Input_String>
+</Cmd_Flip_Widefield>
+<Distance>
+  <AddOn__Device_Type>Cmd Device</AddOn__Device_Type>
+  <Channel:_Arg1>TRUE</Channel:_Arg1>
+  <Channel:_Arg2>FALSE</Channel:_Arg2>
+  <Channel:_Arg3>FALSE</Channel:_Arg3>
+  <Channel:Ret1>TRUE</Channel:Ret1>
+  <Channel:Ret2>TRUE</Channel:Ret2>
+  <Channel:Ret3>FALSE</Channel:Ret3>
+  <Input_String>cmd /k cd C:\LAP Measurements 2.2\Devices\Cmd Device\python console programs\distance_calculator &#38; distance_calculator.bat</Input_String>
+</Distance>
+<K2400>
+  <_4-Wire>FALSE</_4-Wire>
+  <AddOn__Device_Type>Keithley 2400 Series</AddOn__Device_Type>
+  <Auto_Settle>TRUE</Auto_Settle>
+  <Autozero>0</Autozero>
+  <Current_Compliance>1.050000E+0</Current_Compliance>
+  <Current_Range>1.000000E-1</Current_Range>
+  <Enable_Auto_Range>TRUE</Enable_Auto_Range>
+  <Enable_Filter>TRUE</Enable_Filter>
+  <Filter_Readings>3</Filter_Readings>
+  <Filter_Type>0</Filter_Type>
+  <Guard_Mode>Ohms Guard</Guard_Mode>
+  <Integration_Time>1.000000E+0</Integration_Time>
+  <Keithley_2400_in></Keithley_2400_in>
+  <Keithley_2400_out></Keithley_2400_out>
+  <Output_Off_Behavior>0</Output_Off_Behavior>
+  <Rear_Inputs>FALSE</Rear_Inputs>
+  <Reset_On_Init>FALSE</Reset_On_Init>
+  <Settling_Delay>0.000000E+0</Settling_Delay>
+  <Source_Mode>Voltage</Source_Mode>
+  <Voltage_Compliance>1.000000E+1</Voltage_Compliance>
+  <Voltage_Limit>2.100000E+2</Voltage_Limit>
+  <Voltage_Range>1.000000E+1</Voltage_Range>
+  <Voltage_Source_Range_V>2.100000E+2</Voltage_Source_Range_V>
+</K2400>
+<ODWheel>
+  <Acceleration>100</Acceleration>
+  <AddOn__Device_Type>Trinamic Steprocker</AddOn__Device_Type>
+  <Basic_Motor_Configuration></Basic_Motor_Configuration>
+  <Controller_Address>0</Controller_Address>
+  <Conversion_Factor>1.000000E+0</Conversion_Factor>
+  <Maximal_Speed>50</Maximal_Speed>
+  <Motor_number>0</Motor_number>
+  <Positioning_Speed>100</Positioning_Speed>
+  <Reference_Configuration></Reference_Configuration>
+  <Timeout_s>0.000000E+0</Timeout_s>
+  <Unit></Unit>
+</ODWheel>
+<Rough_Adjust>
+  <Acceleration>100</Acceleration>
+  <AddOn__Device_Type>Trinamic Steprocker</AddOn__Device_Type>
+  <Basic_Motor_Configuration></Basic_Motor_Configuration>
+  <Controller_Address>0</Controller_Address>
+  <Conversion_Factor>1.000000E+0</Conversion_Factor>
+  <Maximal_Speed>50</Maximal_Speed>
+  <Motor_number>2</Motor_number>
+  <Positioning_Speed>500</Positioning_Speed>
+  <Reference_Configuration></Reference_Configuration>
+  <Timeout_s>1.000000E+1</Timeout_s>
+  <Unit>steps</Unit>
+</Rough_Adjust>
+<SMU>
+  <AddOn__Device_Type>Agilent B2900 Series</AddOn__Device_Type>
+  <Channel_1>TRUE</Channel_1>
+  <Channel_2>TRUE</Channel_2>
+  <Setup_Channel_1></Setup_Channel_1>
+  <Setup_Channel_2></Setup_Channel_2>
+  <Show_manual_control>TRUE</Show_manual_control>
+</SMU>
+<Spectrometer>
+  <AddOn__Device_Type>Andor Shamrock 500</AddOn__Device_Type>
+  <Device_Number>0</Device_Number>
+  <Direct_Input_Slit_Size_um>1.000000E+3</Direct_Input_Slit_Size_um>
+  <Direct_Output_Slit_Size_um>0.000000E+0</Direct_Output_Slit_Size_um>
+  <Direct_Port_Camera>Newton</Direct_Port_Camera>
+  <Grating_Number>1</Grating_Number>
+  <Initial_Wavelength_nm>8.000000E+2</Initial_Wavelength_nm>
+  <Input_Port>Side</Input_Port>
+  <Output_Port>Direct</Output_Port>
+  <Show_Frontpanel>TRUE</Show_Frontpanel>
+  <Side_Input_Slit_Size_um>2.000000E+2</Side_Input_Slit_Size_um>
+  <Side_Output_Slit_Size_um>0.000000E+0</Side_Output_Slit_Size_um>
+  <Side_Port_Camera></Side_Port_Camera>
+  <Store_Server_Logs>FALSE</Store_Server_Logs>
+  <View_Server_Console>TRUE</View_Server_Console>
+</Spectrometer>
+<Stage_0>
+  <Acceleration>100</Acceleration>
+  <AddOn__Device_Type>Trinamic Steprocker</AddOn__Device_Type>
+  <Basic_Motor_Configuration></Basic_Motor_Configuration>
+  <Controller_Address>0</Controller_Address>
+  <Conversion_Factor>1.873000E+3</Conversion_Factor>
+  <Maximal_Speed>50</Maximal_Speed>
+  <Motor_number>0</Motor_number>
+  <Positioning_Speed>100</Positioning_Speed>
+  <Reference_Configuration></Reference_Configuration>
+  <Timeout_s>1.000000E+1</Timeout_s>
+  <Unit>um</Unit>
+</Stage_0>
+<Stage_1>
+  <Acceleration>100</Acceleration>
+  <AddOn__Device_Type>Trinamic Steprocker</AddOn__Device_Type>
+  <Basic_Motor_Configuration></Basic_Motor_Configuration>
+  <Controller_Address>0</Controller_Address>
+  <Conversion_Factor>1.873000E+3</Conversion_Factor>
+  <Maximal_Speed>50</Maximal_Speed>
+  <Motor_number>1</Motor_number>
+  <Positioning_Speed>100</Positioning_Speed>
+  <Reference_Configuration></Reference_Configuration>
+  <Timeout_s>1.000000E+1</Timeout_s>
+  <Unit>um</Unit>
+</Stage_1>

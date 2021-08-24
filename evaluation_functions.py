@@ -1,5 +1,7 @@
 import numpy as np
+import math
 import scipy.constants as const
+from scipy.interpolate import interp1d
 import lmfit
 from lmfit import Parameters
 import matplotlib.pyplot as plt
@@ -210,26 +212,108 @@ def brute_leastsquare_fit(fun, x_data, y_data,p_names=None,p_min_max_steps_dict=
         plt.show()
     return (arg_list[0:len(p_names)])
      
+def stitchSpectra(lamb_list,count_list, method="scale", edgeremove=(0, 0), shiftToPositive=False, dlambda=None):
+    """
+    Stitches the raw spectra together. For this purpose, the following spectra are shifted
+    to match the previous spectra in the overlapping region. Afterwards the whole data
+    is interpolated on a fixed grid.
+
+    :param str method: stitching method (possible values: scale, shift)
+    :param edgeremove: ratio of omitted data at the edges
+        (e.g. (0.05, 0.05) and edgetype="symmetric": first 5% and last 5% of data is omitted)
+    :type edgeremove: tuple(float, float)
+    :param bool shiftToPositive: if True the spectrum is shifted such that min(spectrum) >= 0
+    :param float dlambda: custom wavelength steps for interpolation, None for default
+    """
+    rawData=np.array([np.array(lamb_list),np.array(count_list)])
+    rawData=rawData.swapaxes(0,1)
+    coefficients = []
+    print("Removing edges for stitching:", *edgeremove)
+    omitRight = rawData[0].shape[1] - math.floor(rawData[0].shape[1] * edgeremove[1])
+    print("Stitching index range is ", 0, omitRight)
+    processed = np.array(rawData[0][:, 0:omitRight])  
+    if dlambda is None:
+        dlambda = math.fabs(processed[0, 1] - processed[0, 0])  ## lambda steps of first spectrum are kept
+    for i, spec in enumerate(rawData[1:]):
+        omitLeft = math.floor(spec.shape[1] * edgeremove[0])
+        omitRight = spec.shape[1] - math.floor(spec.shape[1] * edgeremove[1])
+        print("Stitching index range is ", omitLeft, omitRight)
+        if i == len(rawData)-2:
+            spec = np.array(spec[:, omitLeft:])  ## do not shorten last array at end
+        else:
+            spec = np.array(spec[:, omitLeft:omitRight]) # shorten middle arrays at both sides
+        print("Stitching spectrum in range", np.min(spec[0,]), np.max(spec[0,]))
+        # calculate overlap
+        overlap = (np.min(spec[0,]), np.max(processed[0,])) 
+        #lambdas = np.arange(*overlap, dlambda)
+        #leftfun = interp1d(processed[0,], processed[1,])
+        #rightfun = interp1d(spec[0,], spec[1,])
+        left = np.mean(processed[1, processed[0,] > overlap[0]]) ##mean of counts of overlap
+        right = np.mean(spec[1, spec[0,] < overlap[1]])
+        if method == "shift":
+            # calculate offset in overlap region
+            offset = left - right
+            print("Stitching offset %s in overlap", offset, *overlap)
+            # add shifted spectrum
+            spec[1,] = spec[1,] + offset
+            coefficients.append(offset)
+        elif method == "scale":
+            # calculate factor in overlap region
+            factor = left/right
+            print("Stitching factor"+str(factor)+"  in overlap ", *overlap)
+            spec[1,] = spec[1,] * factor
+            coefficients.append(factor)
+        processed = np.concatenate([processed, spec], axis=1)
+    # interpolate data on grid
+    interpolated = interp1d(processed[0,], processed[1,])
+    lambdas = np.arange(processed[0, 0], processed[0, -1], dlambda)
+    specdata = interpolated(lambdas)
+    # shift above 0
+    if shiftToPositive:
+        minimum = np.min(specdata)
+        if minimum < 0:
+            specdata += math.fabs(minimum)
+    
+    return (lambdas,specdata,coefficients)
+
 
 
 
 if __name__=='__main__':
     ## generate some example data for fitting and testing routines 
-    
-    def fun(x,a,b,c):
-        ret=a*np.sin(b*x)*np.exp(c*x)
-        return(ret)
+    test_brute_fit=False
+    if test_brute_fit:
+        def fun(x,a,b,c):
+            ret=a*np.sin(b*x)*np.exp(c*x)
+            return(ret)
+            
+        df=pd.DataFrame.from_dict({'x_data':np.linspace(0,10,200)})
+        df['y_data']=fun(df['x_data'],1,5,-0.2)
+        df['noise']=np.random.normal(scale=0.2,size=200)
+        df['y_sim']=df['y_data']+df['noise']
         
-    df=pd.DataFrame.from_dict({'x_data':np.linspace(0,10,200)})
-    df['y_data']=fun(df['x_data'],1,5,-0.2)
-    df['noise']=np.random.normal(scale=0.2,size=200)
-    df['y_sim']=df['y_data']+df['noise']
+        arg_list = brute_leastsquare_fit(fun,df['x_data'],df['y_sim'],p_names=['a','b','c'],
+                                         p_min_max_steps_dict={'a':[0,2,40],'b':[0,10,40],'c':[-1,1,40]},
+                                         visualize=True)
+        df['fitted_function']=fun(df['x_data'],*arg_list)
+        df.plot('x_data')
     
-    arg_list = brute_leastsquare_fit(fun,df['x_data'],df['y_sim'],p_names=['a','b','c'],
-                                     p_min_max_steps_dict={'a':[0,2,40],'b':[0,10,40],'c':[-1,1,40]},
-                                     visualize=True)
-    df['fitted_function']=fun(df['x_data'],*arg_list)
-    df.plot('x_data')
+    test_stitchSpectra=True
+    plt.figure()
+    if test_stitchSpectra:
+        lamb_list=[]
+        counts_list=[]    
+        for i in range(4):
+            lamb_list.append(np.linspace(500+i*100,700+i*100,256))
+            counts_list.append(100*np.sin(lamb_list[-1]/100)**2+30*np.random.rand(256))
+            plt.plot(lamb_list[-1],counts_list[-1])
+            
+        
+        lamb,counts,coefficients=stitchSpectra(lamb_list, counts_list)
+        plt.plot(lamb,counts,color='black')
+        plt.xlabel('stitched lamb')
+        plt.ylabel('stitched spectra')
+        plt.show()
     
     
     
