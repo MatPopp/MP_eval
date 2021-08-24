@@ -6,18 +6,15 @@ Created on Mon Aug 23 16:13:19 2021
 """
 
 import numpy as np
-import filehandling as fh
-import evaluation_functions as eval_func
-import physical_functions as phys_func
-import plot_functions as plot_func
-import keyboard 
-import time
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib import cm
-import refractive_index as ri
 
-
+from LAP_eval import filehandling as fh
+from LAP_eval import evaluation_functions as eval_func
+from LAP_eval import physical_functions as phys_func
+from LAP_eval import plot_functions as plot_func
+from LAP_eval import refractive_index as ri
 
 def read_data(datapath='data'):
     """this function shall contaion all the data reading and put all data into 
@@ -69,6 +66,7 @@ def evaluate_data(df):
         if V_SMU > 0 and center_wavelength==center_wavelengths[0]:
             lamb_list=list(df.wavelength.loc[V_Piezo,V_SMU,:].values)
             counts_list=list(df.counts_corr.loc[V_Piezo,V_SMU,:].values)
+            
             df['wavelength_stitched'].loc[V_Piezo,V_SMU,center_wavelength],df['counts_stitched'].loc[V_Piezo,V_SMU,center_wavelength],coefficients=eval_func.stitchSpectra(lamb_list,counts_list)
    
     df['counts_stitched'] = df['counts_stitched'].fillna(np.nan)

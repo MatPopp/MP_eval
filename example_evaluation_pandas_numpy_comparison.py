@@ -1,14 +1,13 @@
 import numpy as np
-import filehandling as fh
-import evaluation_functions as eval_func
-import physical_functions as phys_func
-import plot_functions as plot_func
-import keyboard 
-import time
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib import cm
-import refractive_index as ri
+
+from LAP_eval import filehandling as fh
+from LAP_eval import evaluation_functions as eval_func
+from LAP_eval import physical_functions as phys_func
+from LAP_eval import plot_functions as plot_func
+from LAP_eval import refractive_index as ri
 
 def read_data(datapath='data'):
     """this function shall contaion all the data reading and put all data into 
@@ -36,7 +35,7 @@ def evaluate_data(df):
     df=df.set_index(['V_Piezo','V_SMU']).sort_index()
     
     ## extract array-like counts and wavelengths from spectra
-    df['wavelength'] = [np.array(spectrum.wavelengtt) for spectrum in df['data']]
+    df['wavelength'] = [np.array(spectrum.wavelength) for spectrum in df['data']]
     df['counts'] = [np.array(spectrum.counts) for spectrum in df['data']]
     ## remove cosmics
     df['counts'] = df['counts'].map(eval_func.remove_cosmics)
